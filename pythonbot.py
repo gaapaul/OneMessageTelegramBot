@@ -19,7 +19,7 @@ def get_url(url):
 def get_json_from_url(url):
     content = get_url(url)
     js = json.loads(content)
-    return js
+    return js 
 
 
 def get_updates(offset):
@@ -27,29 +27,29 @@ def get_updates(offset):
     if offset:
         url += "?offset={}".format(offset)
     js = get_json_from_url(url)
-    return js
+    return js #all Json data for current update at offeset
                       
-def getUserCount(chat_id):
+def getUserCount(chat_id): #full user count 
     url = URL + "getChatMembersCount?chat_id={}".format(chat_id)
     js = get_json_from_url(url)
     user_count = js["result"]
     return(user_count)
 
-def send_message(text, chat_id):
+def send_message(text, chat_id): #sends a message
     url = URL + "sendMessage?text={}&chat_id={}".format(text, chat_id)
     get_url(url)
 
-def delete_message(message_id, chat_id):
-    url = URL + "deleteMessage?message_id={}&chat_id={}".format(message_id, chat_id)
+def delete_message(message_id, chat_id): #deletes message
+    url = URL + "deleteMessage?message_id={}&chat _id={}".format(message_id, chat_id)
     get_url(url)
 
     
 def main():
-    update_ids        = []
-    active_user_ids   = []
-    active_message_id = []
+    update_ids        = [] #stores most recent update id for each user 
+    active_user_ids   = [] #stores user ids
+    active_message_id = [] #stores most recent message id pre update
     active_user_count = 0
-    chat_id = -1001215801011
+    chat_id = -1001215801011 #bot only exsists in this chat, change for otthers
     in_id_list = 0
     last_update_id = None
     updates = get_updates(last_update_id)
@@ -58,13 +58,13 @@ def main():
         updates = get_updates(last_update_id)
         user_count = getUserCount(chat_id)
         if len(updates["result"]) > 0:
-            for update in updates["result"]:
+            for update in updates["result"]: #iterates through updates 
                 try:
                     in_id_list = 0
                     user_id = int(update["message"]["from"]["id"])
                     message_id = int(update["message"]["message_id"])
                     update_id = int(update["update_id"])
-                    for users in range(len(active_user_ids)):
+                    for users in range(len(active_user_ids)): #iterates through users and checks list
                             if(int(user_id) == active_user_ids[users]):
                                 in_id_list = 1
                                 if(message_id > active_message_id[users]):                            
